@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>E-Voucher Tiket</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #d4fc79, #96e6a1);
+      padding: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .voucher {
+      background: #ffffff;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 700px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .voucher:hover {
+      transform: translateY(-5px);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .header h2 {
+      font-size: 24px;
+      color: #2c3e50;
+      margin-bottom: 5px;
+    }
+
+    .booking-number {
+      font-size: 16px;
+      font-weight: bold;
+      color: #27ae60;
+    }
+
+    .poster img {
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      margin-top: 20px;
+    }
+
+    .info-strip {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      background-color: #16a085;
+      color: white;
+      border-radius: 10px;
+      padding: 15px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      margin: 25px 0;
+    }
+
+    .info-strip > div {
+      flex: 1 1 30%;
+      margin: 5px 0;
+    }
+
+    .section {
+      margin-bottom: 25px;
+      border-top: 1px solid #eee;
+      padding-top: 15px;
+    }
+
+    .section h3 {
+      font-size: 18px;
+      color: #34495e;
+      margin-bottom: 10px;
+    }
+
+    .section p {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 6px;
+    }
+
+    a.whatsapp-link {
+      color: #16a085;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    a.whatsapp-link:hover {
+      text-decoration: underline;
+    }
+
+    .qrcode {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    @media print {
+      body {
+        background: none;
+        padding: 0;
+      }
+
+      .voucher {
+        box-shadow: none;
+        border: none;
+      }
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+  <div class="voucher">
+    <div class="header">
+      <h2>ANNIVERSARY 1 DEKADE ULTRAS MAN MODEL</h2>
+      <p>Booking Number: <span class="booking-number" id="kodeBooking">-</span></p>
+    </div>
+
+    <div class="poster">
+      <img src="poster-ultras.jpg" alt="Poster Event">
+    </div>
+
+    <div class="info-strip">
+      <div>📅 Tanggal: <span id="tanggalAcara">20-11-2025</span></div>
+      <div>⏰ Waktu: <span id="waktuAcara">18:00</span></div>
+      <div>🚫 Tidak bisa refund</div>
+    </div>
+
+    <div class="section data-pemesan">
+      <h3>Data Pemesan</h3>
+      <p><strong>Nama:</strong> <span id="namaPemesan">-</span></p>
+      <p><strong>Email:</strong> <span id="emailPemesan">-</span></p>
+      <p><strong>Nomor Telepon:</strong> <span id="teleponPemesan">-</span></p>
+      <p><strong>No. KTP:</strong> <span id="nikPemesan">-</span></p>
+      <p><strong>Waktu Pemesanan:</strong> <span id="waktuPesan">-</span></p>
+    </div>
+
+    <div class="section metode-pembayaran">
+      <h3>Metode Pembayaran</h3>
+      <p>Silakan transfer ke rekening berikut:</p>
+      <p><strong>Bank:</strong> BCA</p>
+      <p><strong>No. Rekening:</strong> 8640910942</p>
+      <p><strong>Atas Nama:</strong> MUHAMMAD AJI YOGA PRATAMA</p>
+      <p><em>(NB: Bukti transfer screenshot dan kirim ke admin melalui WhatsApp:)</em></p>
+      <p>
+        <a href="https://wa.me/6285855094087?text=Halo%20admin%2C%20saya%20ingin%20kirim%20bukti%20transfer." class="whatsapp-link" target="_blank">
+          Klik untuk Kirim WhatsApp ke Admin
+        </a>
+      </p>
+    </div>
+
+  </div>
+
+  <script>
+    const order = JSON.parse(localStorage.getItem("lastOrder")) || {};
+    const last4NIK = order.nik ? order.nik.slice(-4) : "0000";
+
+    const today = new Date();
+    const yy = String(today.getFullYear()).slice(-2);
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    const dateCode = yy + mm + dd;
+
+    const bookingNumber = `UMM-${dateCode}-${last4NIK}`;
+
+    document.getElementById("kodeBooking").textContent = bookingNumber;
+    document.getElementById("namaPemesan").textContent = order.nama || "-";
+    document.getElementById("emailPemesan").textContent = order.email || "-";
+    document.getElementById("teleponPemesan").textContent = order.telepon || "-";
+    document.getElementById("nikPemesan").textContent = order.nik || "-";
+    document.getElementById("waktuPesan").textContent = order.waktu || "-";
+
+    new QRCode(document.getElementById("qrcode"), {
+      text: `Booking: ${bookingNumber}\nNama: ${order.nama || "-"}\nTelepon: ${order.telepon || "-"}`,
+      width: 120,
+      height: 120
+    });
+  </script>
+</body>
+</html>

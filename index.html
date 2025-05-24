@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>1 DEKADE ULTRAS MAN MODEL</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #a8e063, #56ab2f);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.95);
+            max-width: 500px;
+            margin: 80px auto;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #145A32;
+            text-shadow: 1px 1px 2px #fff;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        input:focus, select:focus {
+            border-color: #27ae60;
+            outline: none;
+        }
+
+        button {
+            width: 48%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            background-color: #27ae60;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #1e8449;
+        }
+
+        .btn-row {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #welcomeMsg {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2e7d32;
+        }
+
+        @media (max-width: 500px) {
+            .container {
+                margin: 40px 20px;
+                padding: 30px;
+            }
+
+            button {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .btn-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body class="index-page">
+
+    <div class="container">
+        <h1>ANNIVERSARY 1 DEKADE ULTRAS MAN MODEL</h1>
+        <p id="welcomeMsg"></p>
+
+        <form id="bookingForm">
+            <div class="form-group">
+                <label>Nama Lengkap:</label>
+                <input type="text" id="nama" required>
+            </div>
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" id="email" readonly required>
+            </div>
+            <div class="form-group">
+                <label>NIK KTP:</label>
+                <input type="text" id="nik" pattern="[0-9]{16}" required>
+            </div>
+            <div class="form-group">
+                <label>Nomor Telepon:</label>
+                <input type="tel" id="telepon" pattern="08[0-9]{9,13}" required>
+            </div>
+
+            <div class="btn-row">
+                <button type="submit">Pesan Tiket</button>
+                <button type="button" onclick="logout()">Logout</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Cek user login
+        const loggedInEmail = localStorage.getItem("loggedInUser");
+        if (!loggedInEmail) {
+            alert("Silakan login terlebih dahulu.");
+            window.location.href = "login.html";
+        } else {
+            const user = JSON.parse(localStorage.getItem(loggedInEmail));
+            document.getElementById("email").value = loggedInEmail;
+            document.getElementById("nama").value = user.name;
+            document.getElementById("welcomeMsg").textContent = `Selamat datang, ${user.name}!`;
+        }
+
+        // Submit form
+        document.getElementById("bookingForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const bookingData = {
+                nama:   document.getElementById("nama").value,
+                email:  document.getElementById("email").value,
+                nik:    document.getElementById("nik").value,
+                telepon:document.getElementById("telepon").value,
+                waktu:  new Date().toLocaleString()
+            };
+            localStorage.setItem("lastOrder", JSON.stringify(bookingData));
+            // Pindah ke halaman struk
+            window.location.href = "informasi-tiket.html";
+        });
+
+        function logout() {
+            localStorage.removeItem("loggedInUser");
+            alert("Anda telah logout.");
+            window.location.href = "login.html";
+        }
+    </script>
+</body>
+</html>
